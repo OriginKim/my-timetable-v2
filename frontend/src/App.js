@@ -482,7 +482,7 @@ function App() {
                 }}
             >
               <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '20px', width: '95%', maxWidth: '420px' }}>
-                <h3 style={{ margin: '0 0 20px 0' }}>🕒 공강 시간대 선택</h3>
+                <h3 style={{ margin: '0 0 20px 0' }}>🕒 시간대 선택</h3>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '30px repeat(5, 1fr)', gap: '5px', marginBottom: '25px' }}>
                   <div></div>
