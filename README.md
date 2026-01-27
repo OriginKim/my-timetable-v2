@@ -133,6 +133,17 @@ const hasConflict = (newCourse) => {
 - JSON 직렬화/역직렬화를 통한 데이터 관리
 - 캠퍼스별 데이터 분리 저장
 
+### Backend (Spring Boot)
+
+#### 주요 기술
+- **Spring Boot 3.3.4**: REST API 서버
+- **Java 17**: 개발 언어
+- **JPA/Hibernate**: 데이터베이스 ORM
+- **H2 Database**: 인메모리 데이터베이스 (개발용)
+- **Lombok**: 보일러플레이트 코드 감소
+
+> 💡 **참고**: 현재 프론트엔드는 JSON 파일을 직접 로드하여 사용하며, 백엔드는 향후 확장을 위해 준비되어 있습니다.
+
 ### Deployment
 
 #### Vercel CI/CD
@@ -153,11 +164,11 @@ my_timetable/
 │   ├── output/                 # 변환된 JSON 파일
 │   │   ├── seoul_courses.json
 │   │   └── cheonan_courses.json
-│   ├── run_all.py              # PDF -> JSON 변환 스크립트
-│   ├── parser.py               # PDF 파싱 로직
-│   ├── refiner.py              # 데이터 정제 로직
-│   ├── to_sql.py               # SQL 변환 스크립트
-│   ├── database_setup.py       # DB 설정 스크립트
+│   ├── run_all.py              # PDF -> JSON 변환 메인 스크립트
+│   ├── parser.py               # PDF 파싱 로직 (테이블 추출)
+│   ├── refiner.py              # 데이터 정제 로직 (시간표 파싱)
+│   ├── to_sql.py               # JSON -> SQL 변환 (선택사항)
+│   ├── database_setup.py       # SQLite DB 초기화 (선택사항)
 │   └── requirements.txt        # Python 의존성
 │
 ├── frontend/                   # 리액트 웹 어플리케이션
@@ -210,18 +221,17 @@ my_timetable/
 ```
 
 #### 2단계: 데이터 변환 실행
+
+> 💡 **참고**: 개발 환경이 설정되지 않았다면 먼저 [로컬 개발 환경 설정](#7-로컬-개발-환경-설정-development) 섹션을 참고하세요.
+
 ```bash
 # data_processor 폴더로 이동
 cd data_processor
 
-# Python 가상환경 활성화 (Windows)
-venv\Scripts\activate
-
-# 또는 (Linux/Mac)
-source venv/bin/activate
-
-# 의존성 설치 (최초 1회)
-pip install -r requirements.txt
+# Python 가상환경 활성화
+# Windows: venv\Scripts\activate
+# Linux/Mac: source venv/bin/activate
+venv\Scripts\activate  # 또는 source venv/bin/activate
 
 # 데이터 변환 스크립트 실행
 python run_all.py
@@ -276,7 +286,22 @@ git push origin main
 
 ---
 
-## 6. 로컬 개발 환경 설정 (Development)
+## 6. 프로젝트 요구사항 (Requirements)
+
+### 필수 환경
+- **Node.js**: 14.x 이상 (Frontend 개발용)
+- **Python**: 3.8 이상 (Data Processor용)
+- **Java**: 17 이상 (Backend 개발용, 선택사항)
+- **Git**: 버전 관리
+
+### 권장 도구
+- **npm** 또는 **yarn**: Node.js 패키지 관리
+- **pip**: Python 패키지 관리
+- **Gradle**: Java 빌드 도구 (Backend용)
+
+---
+
+## 7. 로컬 개발 환경 설정 (Development)
 
 ### Frontend 개발 환경
 
@@ -315,9 +340,23 @@ pip install -r requirements.txt
 python run_all.py
 ```
 
+### Backend 개발 환경 (선택사항)
+
+```bash
+# backend/demo 폴더로 이동
+cd backend/demo
+
+# Gradle을 통한 애플리케이션 실행
+./gradlew bootRun  # Linux/Mac
+# 또는
+gradlew.bat bootRun  # Windows
+
+# 기본 포트: http://localhost:8080
+```
+
 ---
 
-## 7. 주요 기능 상세 설명
+## 8. 주요 기능 상세 설명
 
 ### 시간표 그리드 렌더링
 - **요일별 컬럼**: 월요일부터 금요일까지 5개 컬럼
@@ -346,7 +385,7 @@ python run_all.py
 
 ---
 
-## 8. 기술적 특징 및 최적화
+## 9. 기술적 특징 및 최적화
 
 ### 성능 최적화
 - **useMemo 활용**: 색상 배열, 총 학점 등 불필요한 재계산 방지
@@ -366,7 +405,7 @@ python run_all.py
 
 ---
 
-## 9. 향후 개선 계획 (Future Improvements)
+## 10. 향후 개선 계획 (Future Improvements)
 
 - [ ] 다크 모드 지원
 - [ ] 시간표 템플릿 저장 및 불러오기
@@ -377,7 +416,7 @@ python run_all.py
 
 ---
 
-## 10. 라이선스 및 기여 (License & Contributing)
+## 11. 라이선스 및 기여 (License & Contributing)
 
 이 프로젝트는 상명대학교 학생들을 위한 오픈소스 프로젝트입니다.
 
@@ -390,7 +429,7 @@ python run_all.py
 
 ---
 
-## 11. 문의 및 지원 (Contact & Support)
+## 12. 문의 및 지원 (Contact & Support)
 
 프로젝트 관련 문의사항이나 버그 리포트는 GitHub Issues를 통해 제출해주세요.
 
