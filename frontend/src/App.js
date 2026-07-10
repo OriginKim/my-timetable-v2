@@ -521,12 +521,20 @@ function App() {
                   ))}
                 </div>
 
-                <button
-                    onClick={() => setIsModalOpen(false)}
-                    style={{ width: '100%', padding: '14px', background: '#4f46e5', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' }}
-                >
-                  필터 적용 완료
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                      onClick={() => setSelectedTimes([])}
+                      style={{ flex: 1, padding: '14px', background: '#f1f5f9', color: '#475569', border: 'none', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' }}
+                  >
+                    전체 지우기
+                  </button>
+                  <button
+                      onClick={() => setIsModalOpen(false)}
+                      style={{ flex: 2, padding: '14px', background: '#4f46e5', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' }}
+                  >
+                    필터 적용 완료
+                  </button>
+                </div>
               </div>
             </div>
         )}
