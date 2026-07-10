@@ -3,6 +3,10 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 
+// 시간 필터 모달은 담은 강의와 무관하게 항상 월~일 전체를 보여줌
+const ALL_DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
+const ALL_DAY_INDICES = [0, 1, 2, 3, 4, 5, 6];
+
 function App() {
   // --- 상태 관리 ---
   const [campus, setCampus] = useState(null);
@@ -35,6 +39,26 @@ function App() {
 
   const totalCredits = useMemo(() => {
     return myTimetable.reduce((sum, c) => sum + (Number(c.credit) || 0), 0);
+  }, [myTimetable]);
+
+  // 담은 시간표에 토/일 강의가 있으면 해당 요일 열을 자동으로 노출
+  const { dayIndices, dayLabels } = useMemo(() => {
+    const hasSat = myTimetable.some((c) => (c.schedules || []).some((s) => s.day === 5));
+    const hasSun = myTimetable.some((c) => (c.schedules || []).some((s) => s.day === 6));
+
+    const idx = [0, 1, 2, 3, 4];
+    const lbl = ['월', '화', '수', '목', '금'];
+
+    if (hasSat || hasSun) {
+      idx.push(5);
+      lbl.push('토');
+    }
+    if (hasSun) {
+      idx.push(6);
+      lbl.push('일');
+    }
+
+    return { dayIndices: idx, dayLabels: lbl };
   }, [myTimetable]);
 
   // --- 데이터 로드 + 정제 ---
@@ -278,11 +302,13 @@ function App() {
                 width: '100%',
                 minWidth: isMobile ? 'auto' : '600px',
                 display: 'grid',
-                gridTemplateColumns: isMobile ? '30px repeat(5, 1fr)' : '50px repeat(5, 1fr)',
+                gridTemplateColumns: isMobile
+                    ? `30px repeat(${dayLabels.length}, 1fr)`
+                    : `50px repeat(${dayLabels.length}, 1fr)`,
                 backgroundColor: 'white',
               }}
           >
-            {['', '월', '화', '수', '목', '금'].map((d) => (
+            {['', ...dayLabels].map((d) => (
                 <div
                     key={d}
                     style={{
@@ -312,7 +338,7 @@ function App() {
                     {slot}
                   </div>
 
-                  {[0, 1, 2, 3, 4].map((day) => {
+                  {dayIndices.map((day) => {
                     const course = myTimetable.find((c) =>
                         (c.schedules || []).some((s) => s.day === day && (s.slots || []).includes(slot))
                     );
@@ -484,9 +510,9 @@ function App() {
               <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '20px', width: '95%', maxWidth: '420px' }}>
                 <h3 style={{ margin: '0 0 20px 0' }}>🕒 시간대 선택</h3>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '30px repeat(5, 1fr)', gap: '5px', marginBottom: '25px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: `30px repeat(${ALL_DAY_LABELS.length}, 1fr)`, gap: '5px', marginBottom: '25px' }}>
                   <div></div>
-                  {['월', '화', '수', '목', '금'].map((d) => (
+                  {ALL_DAY_LABELS.map((d) => (
                       <div key={d} style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '12px', color: '#475569' }}>
                         {d}
                       </div>
@@ -496,7 +522,7 @@ function App() {
                       <React.Fragment key={slot}>
                         <div style={{ textAlign: 'center', fontSize: '10px', color: '#94a3b8' }}>{slot}</div>
 
-                        {[0, 1, 2, 3, 4].map((day) => {
+                        {ALL_DAY_INDICES.map((day) => {
                           const active = selectedTimes.find((t) => t.day === day && t.slot === slot);
 
                           return (
