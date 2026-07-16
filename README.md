@@ -7,6 +7,20 @@
 **기존 주소**: [https://my-timetable-v2.vercel.app/](https://my-timetable-v2.vercel.app/) (접속 시 자동 리다이렉트)
 
 ---
+## 📊 Analytics (Vercel)
+
+2학기 시간표 업데이트 후 재배포, Vercel Analytics를 통해 다음 지표를 확인했습니다.
+
+| 👥 Visitors | 👀 Page Views | 📉 Bounce Rate |
+|:---:|:---:|:---:|
+| 2,036 | 3,277 | 67% |
+
+<details>
+<summary>자세히 보기</summary>
+
+![Vercel Analytics](docs/analytics-2026-07.png)
+
+</details>
 
 ## 1. 프로젝트 배경 및 목적 (Overview)
 
